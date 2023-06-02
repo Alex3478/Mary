@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<link href="/images/Logog.png" rel="icon" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="keywords" content="gta, san andreas по интернету, gta, samp, samp-vl.su, svl, samp virtual life, самп вл, samp-vl, multiplayer, rp">
+<meta name="description" content="Начать играть в GTA San Andreas по сети">
+<meta charset="utf-8">
+<title>Авторизация</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<link href="owl.carousel.css" rel="stylesheet" type="text/css">
+<link href="jquery.formstyler.css" rel="stylesheet" type="text/css">
+<link href="jquery.fancybox.css" rel="stylesheet" type="text/css">
+<link href="slick.css" rel="stylesheet" type="text/css">
+<link href="aos.css" rel="stylesheet" type="text/css">
+<link href="jquery-ui.css" rel="stylesheet" type="text/css">
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</head>
+
+<body class="home">
+
+	<div class="wrapper">
+		<header class="header">
+			<div class="container">
+				<img class="h_logo" src="/images/Logog.png" alt="#">
+				<a href="https://ucp.samp-vl.su" class="h_account">Личный кабинет</a>
+				<nav class="h_menu">
+					<span class="hm_but"></span>
+					<div class="hm_list">
+						<a href="/index.html">Главная</a>
+						<a href="#" target="_blank">Форум</a>
+						<a href="/news/index.html">Новости</a>
+						<a href="/donate/index.html">Донат</a>
+					</div>
+				</nav>
+			</div>
+		</header>
+		<section class="autoriz">
+			<div class="container">
+				<div class="az_body">
+					<h1>Авторизация</h1>
+					<form id="sform" autocomplete="off" method="post" action="login.html">
+
+						<div class="ff_field">
+							<input id="login" name="login" type="text" placeholder="Игровой ник" maxlength="24" autocomplete="off"><span for="login" class="error" style="display: none;"></span>
+						</div>
+						<div class="ff_field">
+							<input id="password" name="password" type="password" placeholder="Пароль" autocomplete="off"><span for="password" class="error" style="display: none;"></span>
+						</div>
+
+						<div class="ff_field">
+							<select id="server" name="server" placeholder="Игровой сервер">
+								<option value="1">Сервер Mary</option>
+
+							</select>
+						</div>
+					
+                        <div align="center" class="g-recaptcha" data-sitekey="6Ld4xJwUAAAAAKGkqrz-41NQBJu1cP3kVxFoiHCe"></div><br>
+                        
+						<div class="ff_but">
+							<button id="login_submit" name="loging" type="submit" value="Войти" class="but_blue">Войти</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+
+		<footer class="footer">
+			<div class="container">
+				<p>MaryLand Rp  © 2023 Все права защищены.</p>
+			</div>
+		</footer>
+	</div>
+<div id="toTop"></div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.validate.js"></script>
+<script>
+
+var errors={required:'Поле обязательно для заполнения',text:'Текст с картинки введен неверно.',unknown:'Такого сервера не существует."'};
+
+var validator=$("#sform").validate({errorElement:"span",rules:{login:"required",password:"required",server:{required:true,range:[1,6]},norobot:{required:true,minlength:4,maxlength:4}},messages:{login:errors['required'],password:errors['required'],server:{required:errors['required'],range:errors['unknown']},norobot:{required:errors['required'],minlength:errors['text'],maxlength:errors['text']}},highlight:function(element,errorClass){$(element).parent().next().find("."+errorClass).removeClass("checked")},
+
+submitHandler:function(){$.post("/login/ajax",{login:$("#sform input[name=login]").val(),password:$("#sform input[name=password]").val(),passip:grecaptcha.getResponse(),server:$("#sform select[name=server]").val(),norobot:$("#sform input[name=norobot]").val()},
+
+function(result){
+
+    switch(result.login){case 1:location.href='/home';break;
+    case 0:$('span[for=login]').html('Аккаунт с таким никнеймом не существует.').show();$('#sform input[name=login]').val('');$('#sform input[name=password]').val('');$('#sform input[name=passwordip]').val('');grecaptcha.reset();break;
+    case-1:$('span[for=password]').html('Неверный пароль.').show();$('#sform input[name=password]').val('');grecaptcha.reset();break;
+    case-2:$('span[for=passwordip]').html('Неверный код безопасности.').show();$('#sform input[name=passwordip]').val('');grecaptcha.reset();break;
+    case-3:$('span[for=norobot]').html('Текст с картинки введен неверно.').show();grecaptcha.reset();break;
+    case-4:$('span[for=login]').html('Аккаунт не прошел полную регистрацию на игровом сервере.').show();$('#sform input[name=login]').val('');$('#sform input[name=password]').val('');$('#sform input[name=passwordip]').val('');grecaptcha.reset();break;
+    case-5:$('span[for=login]').html('Кто-то уже вошел под этим аккаунтом.').show();$('#sform input[name=login]').val('');$('#sform input[name=password]').val('');$('#sform input[name=passwordip]').val('');grecaptcha.reset();break;
+    default:alert(result.login)
+        
+    }},"json")}});function setCaptcha(){$("#captimg").attr("src","/captcha_img/");$('#sform input[name=norobot]').val('')}
+
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="owl.carousel.min.js"></script>
+<script src="jquery.formstyler.min.js"></script>
+<script src="jquery.fancybox.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="aos.js"></script>
+<script src="clipboard-polyfill.js"></script>
+<script src="slick.min.js"></script>
+<script src="script.js"></script>
+</body>
+
+
+</html>
